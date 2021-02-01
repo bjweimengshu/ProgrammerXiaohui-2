@@ -8,26 +8,6 @@ import java.util.Queue;
  */
 public class AVLTree {
     private TreeNode root;
-
-    class TreeNode {
-        int data;
-        int height;
-        TreeNode left;
-        TreeNode right;
-
-        public TreeNode(int data) {
-            this.data = data;
-            this.height = 0;
-        }
-
-        //获得结点的平衡因子
-        public int getBalance(){
-            int left =  (this.left==null ? 0:this.left.height);
-            int right = (this.right==null ? 0:this.right.height);
-            return left - right;
-        }
-    }
-
     /*
      * 获取树的高度
      */
@@ -234,6 +214,25 @@ public class AVLTree {
             if(node.right != null){
                 queue.offer(node.right);
             }
+        }
+    }
+
+    class TreeNode {
+        int data;
+        int height;
+        TreeNode left;
+        TreeNode right;
+
+        public TreeNode(int data) {
+            this.data = data;
+            this.height = 0;
+        }
+
+        //获得结点的平衡因子
+        public int getBalance(){
+            int left =  (this.left==null ? 0:this.left.height);
+            int right = (this.right==null ? 0:this.right.height);
+            return left - right;
         }
     }
 

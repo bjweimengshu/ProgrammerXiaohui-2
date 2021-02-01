@@ -1,3 +1,5 @@
+package chapter1.part2;
+
 import java.util.Arrays;
 
 public class SelectionSort {

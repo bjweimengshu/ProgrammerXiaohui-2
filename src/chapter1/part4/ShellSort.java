@@ -3,7 +3,7 @@ package chapter1.part4;
 import java.util.Arrays;
 
 public class ShellSort {
-    public static void sort(int[] array) {
+    public static void shellSort(int[] array) {
         //希尔排序的增量
         int d = array.length;
 
@@ -25,7 +25,7 @@ public class ShellSort {
 
     public static void main(String[] args) {
         int[] array = { 5, 3, 9, 12, 6, 1, 7, 2, 4, 11, 8, 10 };
-        sort(array);
+        shellSort(array);
         System.out.println(Arrays.toString(array));
     }
 }

@@ -44,7 +44,7 @@ public class RedBlackTree {
                 if(targetNode.right == null){
                     targetNode.right = node;
                     node.parent = targetNode;
-                    insertFix(node);
+                    insertAdjust(node);
                     return true;
                 }
                 targetNode = targetNode.right;
@@ -52,7 +52,7 @@ public class RedBlackTree {
                 if(targetNode.left == null){
                     targetNode.left = node;
                     node.parent = targetNode;
-                    insertFix(node);
+                    insertAdjust(node);
                     return true;
                 }
                 targetNode = targetNode.left;
@@ -62,67 +62,70 @@ public class RedBlackTree {
     }
 
     //插入后自我调整
-    private void insertFix(TreeNode node) {
-        //父结点z
-        TreeNode father;
-        //祖父结点
-        TreeNode grandFather;
-        while ((father = node.parent) != null && father.color == RED) {
-            grandFather = father.parent;
-            if (grandFather.left == father) {
-                TreeNode uncle = grandFather.right;
+    private void insertAdjust(TreeNode node) {
+        //创建父结点和祖父结点指针
+        TreeNode parent, grandParent;
+        //局面3的调整有可能引发后续的一系列调整，所以使用while循环。
+        while (node.parent != null && node.parent.color == RED) {
+            parent = node.parent;
+            grandParent = parent.parent;
+            if (grandParent.left == parent) {
+                TreeNode uncle = grandParent.right;
                 //局面3：新结点的父结点和叔叔结点都是红色。
                 if (uncle != null && uncle.color == RED) {
-                    father.color = BLACK;
+                    parent.color = BLACK;
                     uncle.color = BLACK;
-                    grandFather.color = RED;
-                    node = grandFather;
+                    grandParent.color = RED;
+                    node = grandParent;
                     continue;
                 }
                 //局面4：新结点的父结点是红色，叔叔结点是黑色或者没有叔叔，且新结点是父结点的右孩子，父结点是祖父结点的左孩子。
-                if (node == father.right) {
-                    leftRotate(father);
+                if (node == parent.right) {
+                    leftRotate(parent);
                     TreeNode tmp = node;
-                    node = father;
-                    father = tmp;
+                    node = parent;
+                    parent = tmp;
                 }
                 //局面5：新结点的父结点是红色，叔叔结点是黑色或者没有叔叔，且新结点是父结点的左孩子，父结点是祖父结点的左孩子。
-                father.color = BLACK;
-                grandFather.color = RED;
-                rightRotate(grandFather);
+                parent.color = BLACK;
+                grandParent.color = RED;
+                rightRotate(grandParent);
             } else {
-                TreeNode uncle = grandFather.left;
+                TreeNode uncle = grandParent.left;
                 //局面3（镜像）：新结点的父结点和叔叔结点都是红色。
                 if (uncle != null && uncle.color == RED) {
-                    father.color = BLACK;
+                    parent.color = BLACK;
                     uncle.color = BLACK;
-                    grandFather.color = RED;
-                    node = grandFather;
+                    grandParent.color = RED;
+                    node = grandParent;
                     continue;
                 }
                 //局面4（镜像）：新结点的父结点是红色，叔叔结点是黑色或者没有叔叔，且新结点是父结点的左孩子，父结点是祖父结点的右孩子。
-                if (node == father.left) {
-                    rightRotate(father);
+                if (node == parent.left) {
+                    rightRotate(parent);
                     TreeNode tmp = node;
-                    node = father;
-                    father = tmp;
+                    node = parent;
+                    parent = tmp;
                 }
                 //局面5（镜像）：新结点的父结点是红色，叔叔结点是黑色或者没有叔叔，且新结点是父结点的右孩子，父结点是祖父结点的右孩子。
-                father.color = BLACK;
-                grandFather.color = RED;
-                leftRotate(grandFather);
+                parent.color = BLACK;
+                grandParent.color = RED;
+                leftRotate(grandParent);
             }
         }
-        root.color = BLACK;
+        //经过局面3的调整，有可能把根结点变为红色，此时再变回黑色即可。
+        if(root.color == RED){
+            root.color = BLACK;
+        }
     }
 
     //删除节点
-    public void delete(int key) {
-        delete(search(key));
+    public void remove(int key) {
+        remove(search(key));
     }
 
     //删除节点详细逻辑
-    private void delete(TreeNode node) {
+    private void remove(TreeNode node) {
         TreeNode targetNode = node;
         if (node == null)
             return;
@@ -138,7 +141,7 @@ public class RedBlackTree {
             }
             //把后继结点复制到待删除结点位置
             targetNode.data = successNode.data;
-            delete(successNode);
+            remove(successNode);
             return;
         }
         //第二步：根据待删除结点和其唯一子结点的颜色，分情况处理。
@@ -160,12 +163,12 @@ public class RedBlackTree {
         }
         if (node.color == BLACK )
             //第三步：遇到双黑结点，在子结点顶替父结点之后，分成6种子情况处理。
-            removeFix(parent, successNode);
+            removeAdjust(parent, successNode);
 
     }
 
     //删除结点后的自我调整
-    private void removeFix(TreeNode parent, TreeNode node) {
+    private void removeAdjust(TreeNode parent, TreeNode node) {
         while ((node == null || node.color == BLACK) && node != root) {
             if (parent.left == node) {
                 //node的兄弟节点
@@ -243,8 +246,9 @@ public class RedBlackTree {
                 node = root; //跳出循环
             }
         }
-        if (node != null)
+        if (node != null) {
             node.color = BLACK;
+        }
     }
 
     //左旋转
@@ -342,9 +346,7 @@ public class RedBlackTree {
         for(int i=0; i<input.length; i++) {
             rbTree.insert(input[i]);
         }
-        //rbTree.insert(21);
-        //rbTree.delete(21);
-        rbTree.delete(8);
+        rbTree.remove(8);
         System.out.println("中序遍历: ");
         inOrderTraversal(rbTree.root);
         System.out.println();

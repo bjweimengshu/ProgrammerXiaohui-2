@@ -3,7 +3,7 @@ package chapter1.part3;
 import java.util.Arrays;
 
 public class InsertionSort {
-    public static void sort(int[] array) {
+    public static void insertSort(int[] array) {
         for (int i = 1; i < array.length; i++) {
             int insertValue = array[i];
             int j = i - 1;
@@ -18,7 +18,7 @@ public class InsertionSort {
 
     public static void main(String[] args) {
         int[] array = { 12, 1, 3, 46, 5, 0, -3, 12, 35, 16 };
-        sort(array);
+        insertSort(array);
         System.out.println(Arrays.toString(array));
     }
 }
