@@ -3,7 +3,7 @@ package chapter1.part5;
 import java.util.Arrays;
 
 public class MergeSort {
-    static public void mergeSort(int[] array, int start, int end) {
+    public static void mergeSort(int[] array, int start, int end) {
         if (start < end) {
             //折半成两个小集合，分别进行递归
             int mid = (start + end) / 2;
@@ -14,7 +14,7 @@ public class MergeSort {
         }
     }
 
-    static private void merge(int[] array, int start, int mid, int end) {
+    private static void merge(int[] array, int start, int mid, int end) {
         //开辟额外大集合，设置指针
         int[] tempArray = new int[end - start + 1];
         int p1 = start;
@@ -30,14 +30,17 @@ public class MergeSort {
             }
         }
         //左侧小集合还有剩余，依次放入大集合尾部
-        while (p1 <= mid)
+        while (p1 <= mid) {
             tempArray[p++] = array[p1++];
+        }
         //右侧小集合还有剩余，依次放入大集合尾部
-        while (p2 <= end)
+        while (p2 <= end) {
             tempArray[p++] = array[p2++];
+        }
         //把大集合的元素复制回原数组
-        for (int i = 0; i < tempArray.length; i++)
+        for (int i = 0; i < tempArray.length; i++) {
             array[i + start] = tempArray[i];
+        }
     }
 
     public static void main(String[] args) {

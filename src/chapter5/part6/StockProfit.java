@@ -51,8 +51,10 @@ public class StockProfit {
         for(int i=1;i<n;++i) {
             for(int j=1;j<m;j++){
                 if((j&1) == 1){
+                    //j为奇数的情况
                     resultTable[i][j] = Math.max(resultTable[i-1][j], resultTable[i-1][j-1]-prices[i]);
                 }else {
+                    //j为偶数的情况
                     resultTable[i][j] = Math.max(resultTable[i-1][j], resultTable[i-1][j-1]+prices[i]);
                 }
             }
@@ -78,8 +80,10 @@ public class StockProfit {
         for(int i=1;i<n;i++) {
             for(int j=1;j<m;j++){
                 if((j&1) == 1){
+                    //j为奇数的情况
                     resultTable[j] = Math.max(resultTable[j], resultTable[j-1]-prices[i]);
                 }else {
+                    //j为偶数的情况
                     resultTable[j] = Math.max(resultTable[j], resultTable[j-1]+prices[i]);
                 }
             }
@@ -106,8 +110,10 @@ public class StockProfit {
         for(int i=1;i<n;i++) {
             for(int j=1;j<m;j++){
                 if((j&1) == 1){
+                    //j为奇数的情况
                     resultTable[j] = Math.max(resultTable[j], resultTable[j-1]-prices[i]);
                 }else {
+                    //j为偶数的情况
                     resultTable[j] = Math.max(resultTable[j], resultTable[j-1]+prices[i]);
                 }
             }
