@@ -124,9 +124,6 @@ public class BinarySearchTree {
                 successParentNode = successNode;
                 successNode = successNode.left;
             }
-            if(targetNode == root) {
-                root = successNode;
-            }
             //把后继结点复制到待删除结点位置
             targetNode.data = successNode.data;
             //删除后继结点
@@ -161,6 +158,7 @@ public class BinarySearchTree {
         tree.search(3);
         tree.delete(3);
         tree.search(3);
+        tree.delete(6);
         inOrderTraversal(tree.root);
     }
 }
