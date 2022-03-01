@@ -145,7 +145,7 @@ public class RedBlackTree {
             return;
         }
         //第二步：根据待删除结点和其唯一子结点的颜色，分情况处理。
-        TreeNode successNode = node.left!= null ? node.left : node.right;
+        TreeNode successNode = node.right; //node只可能拥有右孩子或没有孩子
         TreeNode parent = node.parent;
         if (parent == null) {
             //子情况1，被删除结点是红黑树的根结点：
@@ -153,6 +153,7 @@ public class RedBlackTree {
             if (successNode != null)
                 successNode.parent = null;
         } else {
+            //无论何种情况，都需要先删除node结点
             if (successNode != null)
                 successNode.parent = parent;
             if (parent.left == node)
@@ -161,10 +162,15 @@ public class RedBlackTree {
                 parent.right = successNode;
             }
         }
-        if (node.color == BLACK )
-            //第三步：遇到双黑结点，在子结点顶替父结点之后，分成6种子情况处理。
-            removeAdjust(parent, successNode);
-
+        //此时情况1已处理完毕，如果父结点是黑色结点，则增加额外处理
+        if (node.color == BLACK)
+            if(successNode!=null && successNode.color == RED ){
+                //情况2：父结点是黑，子节点是红
+                successNode.color = BLACK;
+            }else {
+                //情况3：遇到双黑结点。此时进入第三步，在子结点顶替父结点之后，分成6种子情况处理。
+                removeAdjust(parent, successNode);
+            }
     }
 
     //删除结点后的自我调整
@@ -194,18 +200,20 @@ public class RedBlackTree {
                         break;
                     }
                 }
-                //子情况5，node的父结点随意，兄弟结点是黑色右孩子，左侄子结点是红色，右侄子结点是黑色：
-                if (sibling.left == null || sibling.color == RED) {
-                    sibling.left.color = BLACK;
-                    sibling.color = RED;
+                //子情况5，node的父结点随意，兄弟结点是黑色右孩子，左侄子结点是红色：
+                if (sibling.color == BLACK && sibling.left!=null && sibling.left.color == RED) {
                     rightRotate(sibling);
+                    sibling.parent.color = BLACK;
+                    sibling.color = RED;
                     sibling = sibling.parent;
                 }
-                //子情况6，结点2的父结点随意，兄弟结点B是黑色右孩子，右侄子结点是红色：
-                sibling.color = parent.color;
-                parent.color = BLACK;
-                sibling.right.color = BLACK;
-                leftRotate(parent);
+                //子情况6，node的父结点随意，兄弟结点是黑色右孩子，右侄子结点是红色：
+                if (sibling.color == BLACK && sibling.right!=null && sibling.right.color == RED) {
+                    leftRotate(sibling.parent);
+                    sibling.color = sibling.left.color;
+                    sibling.left.color = BLACK;
+                    sibling.right.color = BLACK;
+                }
                 node = root; //跳出循环
             } else {
                 //node的兄弟节点
@@ -231,18 +239,20 @@ public class RedBlackTree {
                         break;
                     }
                 }
-                //子情况5（镜像），node的父结点随意，兄弟结点是黑色左孩子，右侄子结点是红色，左侄子结点是黑色：
-                if (sibling.right == null || sibling.right.color == RED) {
-                    sibling.right.color = BLACK;
-                    sibling.color = RED;
+                //子情况5（镜像），node的父结点随意，兄弟结点是黑色左孩子，右侄子结点是红色：
+                if (sibling.color == BLACK && sibling.right!=null && sibling.right.color == RED) {
                     leftRotate(sibling);
+                    sibling.parent.color = BLACK;
+                    sibling.color = RED;
                     sibling = sibling.parent;
                 }
-                //子情况6（镜像），结点2的父结点随意，兄弟结点是黑色左孩子，左侄子结点是红色：
-                sibling.color = parent.color;
-                parent.color = BLACK;
-                sibling.left.color = BLACK;
-                rightRotate(parent);
+                //子情况6（镜像），node的父结点随意，兄弟结点是黑色左孩子，左侄子结点是红色：
+                if (sibling.color == BLACK && sibling.left!=null && sibling.left.color == RED) {
+                    rightRotate(sibling.parent);
+                    sibling.color = sibling.right.color;
+                    sibling.right.color = BLACK;
+                    sibling.left.color = BLACK;
+                }
                 node = root; //跳出循环
             }
         }
@@ -341,18 +351,35 @@ public class RedBlackTree {
     }
 
     public static void main(String[] args) {
+        //case 1:
         RedBlackTree rbTree = new RedBlackTree();
         int input[]= {13,8,17,1,11,15,25,6,22,27};
-        for(int i=0; i<input.length; i++) {
+        for(int i=0; i<10; i++) {
             rbTree.insert(input[i]);
         }
-        rbTree.remove(8);
+        rbTree.remove(25);
         System.out.println("中序遍历: ");
         inOrderTraversal(rbTree.root);
         System.out.println();
         System.out.println("层序遍历: ");
         levelOrderTraversal(rbTree.root);
         System.out.println();
+
+        //case 2:
+        rbTree = new RedBlackTree();
+        for(int i=0; i<1000; i++) {
+            rbTree.insert(i);
+        }
+        for(int i=100; i<1000; i+=100) {
+            rbTree.remove(i);
+        }
+        System.out.println("中序遍历: ");
+        inOrderTraversal(rbTree.root);
+        System.out.println();
+        System.out.println("层序遍历: ");
+        levelOrderTraversal(rbTree.root);
+        System.out.println();
+
     }
 }
 
