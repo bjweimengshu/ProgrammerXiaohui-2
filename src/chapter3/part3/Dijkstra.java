@@ -45,8 +45,7 @@ public class Dijkstra {
                 }
                 int weight = edge.weight;
                 int preDistance = distances[edge.index];
-                if ((weight != Integer.MAX_VALUE) &&
-                        ((minDistanceFromStart + weight) < preDistance)) {
+                if (minDistanceFromStart + weight < preDistance) {
                     distances[edge.index] = minDistanceFromStart + weight;
                 }
             }
@@ -102,8 +101,7 @@ public class Dijkstra {
                 }
                 int weight = edge.weight;
                 int preDistance = distances[edge.index];
-                if ((weight != Integer.MAX_VALUE) &&
-                        ((minDistanceFromStart + weight) < preDistance)) {
+                if (minDistanceFromStart + weight < preDistance) {
                     distances[edge.index] = minDistanceFromStart + weight;
 
                     prevs[edge.index] = minDistanceIndex;
@@ -178,7 +176,7 @@ public class Dijkstra {
         private LinkedList<Edge>[] adj;
 
         Graph(int size) {
-            //初始化顶点和邻接矩阵
+            //初始化顶点和邻接表
             vertexes = new Vertex[size];
             adj = new LinkedList[size];
             for (int i = 0; i < adj.length; i++) {
