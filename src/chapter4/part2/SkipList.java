@@ -100,7 +100,7 @@ public class SkipList{
 
     //删除结点
     public boolean remove(int data){
-        Node removedNode = search(data);
+        Node removedNode = findNode(data);
         if(removedNode == null){
             return false;
         }
@@ -127,6 +127,7 @@ public class SkipList{
         //如果删除层是最高层
         if(leftNode.up == null){
             leftNode.down = head;
+            rightNode.down = tail;
             leftNode.down.up = null;
             rightNode.down.up = null;
         }else {
@@ -176,7 +177,7 @@ public class SkipList{
         list.insert(65);
         list.printList();
         list.search(50);
-        list.remove(50);
+        System.out.println(list.remove(50)?"删除结点成功":"删除结点失败");
         list.search(50);
     }
 }
