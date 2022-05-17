@@ -126,8 +126,8 @@ public class SkipList{
         Node rightNode = leftNode.right;
         //如果删除层是最高层
         if(leftNode.up == null){
-            leftNode.down = head;
-            rightNode.down = tail;
+            head = leftNode.down;
+            tail = rightNode.down;
             leftNode.down.up = null;
             rightNode.down.up = null;
         }else {
