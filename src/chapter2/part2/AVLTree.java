@@ -166,6 +166,8 @@ public class AVLTree {
                     node.data = min.data;
                     node.right = remove(node.right, min);
                 }
+            } else if (node.left == null && node.right == null) {
+                return null;
             } else {
                 node = (node.left!=null) ? node.left : node.right;
             }
@@ -236,7 +238,7 @@ public class AVLTree {
         }
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         AVLTree tree = new AVLTree();
         int input[]= {5,3,7,2,4,6,9,1};
         for(int i=0; i<input.length; i++) {
@@ -261,5 +263,21 @@ public class AVLTree {
         levelOrderTraversal(tree.root);
         System.out.println();
         System.out.printf("高度: %d\n", tree.height());
+    }*/
+    
+    
+    public static void main(String[] args) {
+        AVLTree tree = new AVLTree();
+        int input[] = {5, 3, 7};
+        for (int i = 0; i < input.length; i++) {
+            tree.insert(input[i]);
+        }
+        System.out.println("层序遍历: ");
+        levelOrderTraversal(tree.root);
+        tree.remove(7);
+        System.out.println("层序遍历: ");
+        levelOrderTraversal(tree.root);
+
     }
+    
 }
